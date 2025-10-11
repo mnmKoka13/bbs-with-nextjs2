@@ -1,9 +1,6 @@
 
 import BBSCardList from "@/components/BBSCardList";
-import { PrismaClient } from "@prisma/client";
-
-
-const prisma = new PrismaClient();
+import { prisma } from "@/lib/prisma";
 
 export default function Home() {
   // Server Action
