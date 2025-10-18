@@ -1,33 +1,23 @@
 
 import BBSCardList from "@/components/BBSCardList";
-import { prisma } from "@/lib/prisma";
+import { BBSData } from "./types/types";
 
-export default function Home() {
-  // Server Action
-  async function createUser(formData: FormData) {
-    "use server";
+async function fetchBBSAllData() {
+  const response = await fetch("http://localhost:3000/api/post",
+    { cache: "no-store" }
+  )
+  
+  const bbsAllData: BBSData[] = await response.json()
+  return bbsAllData
+}
 
-    const name = formData.get("name");
-    const email = formData.get("email");
 
-    try {
-      // ユーザー作成処理
-      await prisma.user.create({
-        data: {
-          name: name as string,
-          email: email as string,
-        },
-      });
-
-      console.log("ユーザー作成に成功しました");
-    } catch (error) {
-      console.error("ユーザー作成に失敗しました, " + error);
-    }
-  }
+export default async function Home() {
+  const bbsAllData = await fetchBBSAllData()
 
   return (
     <div>
-      <BBSCardList />
+      <BBSCardList bbsAllData={bbsAllData} />
     </div>
   );
 }
