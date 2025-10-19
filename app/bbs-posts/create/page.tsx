@@ -8,12 +8,9 @@ import { z } from "zod"
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { Textarea } from '@/components/ui/textarea'
+import { useRouter } from 'next/navigation'
 
 const formSchema = z.object({
-  userName: z
-    .string()
-    .min(2, { message: 'ユーザー名は２文字以上で入力してください。'})
-    .max(20, { message: 'ユーザー名は20文字以下で入力してください。'}),
   title: z
     .string()
     .min(2, { message: 'タイトルは２文字以上で入力してください。'})
@@ -25,17 +22,37 @@ const formSchema = z.object({
 })
 
 function CreateBBSPostPage() {
+  const router = useRouter()
+
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      userName: '',
       title: '',
       content: '',
     }
   })
 
-  const onSubmit = async () => {
-    console.log("submitted")
+  const onSubmit = async (value: z.infer<typeof formSchema>) => {
+    const { title, content } = value
+    try {
+      await fetch('http://localhost:3000/api/post', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title,
+          content,
+        })
+      })
+      // 投稿が成功したら、トップページにリダイレクト
+      router.push('/')
+      router.refresh()
+    } catch (err) {
+      console.error(err)
+    } finally {
+      console.log('投稿処理が完了しました。')
+    }
   }
 
   return (
