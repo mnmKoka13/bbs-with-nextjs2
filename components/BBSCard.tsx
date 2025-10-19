@@ -26,7 +26,7 @@ const BBSCard = ({ bbsData }: BBSDataProps) => {
           {content}
         </CardContent>
         <CardFooter>
-          <Link href={`/bbs-post/${id}`} className="text-blue-500">Read More</Link>
+          <Link href={`/bbs-posts/${id}`} className="text-blue-500">Read More</Link>
         </CardFooter>
       </Card>
     </div>
