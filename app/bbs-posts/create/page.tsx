@@ -57,7 +57,7 @@ function CreateBBSPostPage() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3 w-1/2 px-7">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3 w-1/2 px-7 py-5">
         <FormField
           control={form.control}
           name="title"
