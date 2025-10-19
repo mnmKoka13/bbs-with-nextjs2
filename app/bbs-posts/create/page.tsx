@@ -8,9 +8,9 @@ import { z } from "zod"
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { Textarea } from '@/components/ui/textarea'
-import { useRouter } from 'next/navigation'
+import { postBBS } from '@/app/actions/postBBSAction'
 
-const formSchema = z.object({
+export const formSchema = z.object({
   title: z
     .string()
     .min(2, { message: 'タイトルは２文字以上で入力してください。'})
@@ -22,8 +22,6 @@ const formSchema = z.object({
 })
 
 function CreateBBSPostPage() {
-  const router = useRouter()
-
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -34,25 +32,27 @@ function CreateBBSPostPage() {
 
   const onSubmit = async (value: z.infer<typeof formSchema>) => {
     const { title, content } = value
-    try {
-      await fetch('http://localhost:3000/api/post', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          title,
-          content,
-        })
-      })
-      // 投稿が成功したら、トップページにリダイレクト
-      router.push('/')
-      router.refresh()
-    } catch (err) {
-      console.error(err)
-    } finally {
-      console.log('投稿処理が完了しました。')
-    }
+    postBBS({title, content})
+    // server actionへ移行に伴いコメントアウト
+    // try {
+    //   await fetch('http://localhost:3000/api/post', {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify({
+    //       title,
+    //       content,
+    //     })
+    //   })
+    //   // 投稿が成功したら、トップページにリダイレクト
+    //   router.push('/')
+    //   router.refresh()
+    // } catch (err) {
+    //   console.error(err)
+    // } finally {
+    //   console.log('投稿処理が完了しました。')
+    // }
   }
 
   return (
